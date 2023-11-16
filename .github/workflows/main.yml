@@ -29,6 +29,14 @@ jobs:
       - name: Run tests
         run: |
           echo "Running tests..."
+        # You can add your test commands here
+
+      - name: Set build status
+        if: always()
+        uses: badboy/check-status-action@v1
+        with:
+          result: ${{ job.status }}
+          context: Build
 
   lint:
     runs-on: ubuntu-latest
@@ -50,3 +58,24 @@ jobs:
       - name: Lint code
         run: |
           pylint src/
+
+      - name: Set lint status
+        if: always()
+        uses: badboy/check-status-action@v1
+        with:
+          result: ${{ job.status }}
+          context: Lint
+
+  branch-protection-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set branch protection status
+        if: always()
+        uses: badboy/check-status-action@v1
+        with:
+          result: ${{ job.status }}
+          context: Require branches to be up to date before merging
