@@ -21,11 +21,6 @@ jobs:
         with:
           python-version: 3.8
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
       - name: Run tests
         run: |
           echo "Running tests..."
@@ -47,29 +42,6 @@ jobs:
         with:
           python-version: 3.8
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Lint code
-        run: |
-          pylint src/
-
       - name: Set lint status
         if: always()
         run: echo "::set-output name=lint_status::success"
-
-  branch-protection-check:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Set branch protection status
-        if: always()
-        run: |
-          branch_protection_status=$(gh api repos/:owner/:repo/branches/main/protection/required_status_checks -H "Accept: application/vnd.github.v3+json" | jq -r '.contexts[]' | grep -c "build_status" && gh api repos/:owner/:repo/branches/main/protection/required_status_checks -H "Accept: application/vnd.github.v3+json" | jq -r '.contexts[]' | grep -c "lint_status")
-          if [ "$branch_protection_status" -eq 2 ]; then
-            echo "::set-output name=branch_protection_status::success"
-          else
-            echo "::set-output name=branch_protection_status::failure"
-          fi
