@@ -3,50 +3,38 @@ name: CI
 on:
   push:
     branches:
-      - main
-  pull_request:
-    branches:
-      - main
+      - "**" #double star includes a '/'.  single star doesnt match a '/'
+    tags:
+      - "**" #double star includes a '/'.  single star doesnt match a '/'
+  schedule:
+    # Daily at 05:44
+    - cron: '44 5 * * *'
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  PYTHON_VERSION: 3.7
 
 jobs:
-  build:
+  build_pm:
+    name: CI_PM
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install Poetry and Venv
+        run: |
+          echo "abc"
+      - name: Publish executable
+        #only run if a new tag is created
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          echo "abc"
+  ABC_pm:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Run tests
-        run: |
-          echo "Running tests..."
-
-  lint:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Lint code
-        run: |
-          pylint src/
