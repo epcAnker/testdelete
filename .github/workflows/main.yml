@@ -3,50 +3,36 @@ name: CI
 on:
   push:
     branches:
-      - main
-  pull_request:
-    branches:
-      - main
+      - "**" #double star includes a '/'.  single star doesnt match a '/'
+    tags:
+      - "**" #double star includes a '/'.  single star doesnt match a '/'
+  schedule:
+    # Daily at 05:44
+    - cron: '44 5 * * *'
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  PYTHON_VERSION: 3.7
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
+  build_pm:
+    name: CI_PM
+    runs-on: windows-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
-
-      - name: Run tests
+      - name: Install Poetry and Venv
         run: |
-          echo "Running tests..."
-        # You can add your test commands here
-
-      - name: Set build status
-        if: always()
-        run: echo "::set-output name=build_status::success"
-
-  lint:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
-
-      - name: Set lint status
-        if: always()
-        run: echo "::set-output name=lint_status::success"
-
-  ABC:
+          echo "abc"
+      - name: Publish executable
+        #only run if a new tag is created
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          echo "abc"
+  ABC_pm:
     runs-on: ubuntu-latest
 
     steps:
