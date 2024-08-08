@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: Pre-build
         run: |
-          if false; then
+          if [false] then
             echo "IF TRUE STATEMENT"
           else
             echo "IF FALSE STATEMENT"
