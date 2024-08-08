@@ -3,12 +3,9 @@ name: CI
 on:
   push:
     branches:
-      - "**" #double star includes a '/'.  single star doesnt match a '/'
+      - "**" # double star includes a '/'. single star doesn't match a '/'
     tags:
-      - "**" #double star includes a '/'.  single star doesnt match a '/'
-  schedule:
-    # Daily at 05:44
-    - cron: '44 5 * * *'
+      - "**" # double star includes a '/'. single star doesn't match a '/'
 
 defaults:
   run:
@@ -18,23 +15,13 @@ env:
   PYTHON_VERSION: 3.7
 
 jobs:
-  build_pm:
-    name: CI_PM
-    runs-on: windows-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Install Poetry and Venv
-        run: |
-          echo "abc"
-      - name: Publish executable
-        #only run if a new tag is created
-        if: startsWith(github.ref, 'refs/tags/')
-        run: |
-          echo "abc"
-  ABC_pm:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Pre-build
+        run: |
+          if [ false ]; then
+            echo "IF TRUE STATEMENT"
+          else
+            echo "IF FALSE STATEMENT"
+          fi
