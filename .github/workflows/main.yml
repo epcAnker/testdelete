@@ -6,6 +6,9 @@ on:
       - "**" # double star includes a '/'. single star doesn't match a '/'
     tags:
       - "**" # double star includes a '/'. single star doesn't match a '/'
+  schedule:
+    # Daily at 05:44
+    - cron: '44 5 * * *'
 
 defaults:
   run:
@@ -20,7 +23,7 @@ jobs:
     steps:
       - name: Pre-build
         run: |
-          if [ false ]; then
+          if false; then
             echo "IF TRUE STATEMENT"
           else
             echo "IF FALSE STATEMENT"
